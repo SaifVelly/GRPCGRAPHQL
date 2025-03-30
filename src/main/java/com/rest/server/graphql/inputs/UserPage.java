@@ -1,52 +1,51 @@
 package com.rest.server.graphql.inputs;
 
 import com.rest.server.models.User;
-
 import java.util.List;
 
 public class UserPage {
 
-    private List<User> users;
-    private long totalElements;
-    private int currentPage;
-    private int pageSize;
+    private List<User> data;
+    private int total;
+    private int page;
+    private int size;
 
-    public UserPage(List<User> users, long totalElements, int currentPage, int pageSize) {
-        this.users = users;
-        this.totalElements = totalElements;
-        this.currentPage = currentPage;
-        this.pageSize = pageSize;
+    public UserPage(List<User> data, long total, int page, int size) {
+        this.data = data;
+        this.total = (int) total;
+        this.page = page;
+        this.size = size;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<User> getData() {
+        return data;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setData(List<User> data) {
+        this.data = data;
     }
 
-    public long getTotalElements() {
-        return totalElements;
+    public int getTotal() {
+        return total;
     }
 
-    public void setTotalElements(long totalElements) {
-        this.totalElements = totalElements;
+    public void setTotal(int total) {
+        this.total = total;
     }
 
-    public int getCurrentPage() {
-        return currentPage;
+    public int getPage() {
+        return page;
     }
 
-    public void setCurrentPage(int currentPage) {
-        this.currentPage = currentPage;
+    public void setPage(int page) {
+        this.page = page;
     }
 
-    public int getPageSize() {
-        return pageSize;
+    public int getSize() {
+        return size;
     }
 
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
+    public void setSize(int size) {
+        this.size = size;
     }
 }
