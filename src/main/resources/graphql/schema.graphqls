@@ -19,6 +19,11 @@ type Query {
     # Tag Queries
     getAllTags(page: Int!, size: Int!): TagPage
     getSingleTag(id: String!): Tag
+
+    # Test Queries
+    greeting(locale: String!): String
+    currentDate(locale: String!): String
+    triggerServerError: String
 }
 
 type Mutation {
