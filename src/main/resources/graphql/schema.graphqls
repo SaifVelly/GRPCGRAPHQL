@@ -15,6 +15,10 @@ type Query {
     # Location Queries
     getAllLocations(page: Int!, size: Int!): LocationPage
     getSingleLocation(id: String!): Location
+
+    # Tag Queries
+    getAllTags(page: Int!, size: Int!): TagPage
+    getSingleTag(id: String!): Tag
 }
 
 type Mutation {
@@ -35,6 +39,11 @@ type Mutation {
     createLocation(input: LocationInput!): Location
     updateLocation(id: String!, input: LocationInput!): Location
     deleteLocation(id: String!): String
+
+    #Tag Mutation
+    createTag(input: TagInput!): Tag
+    updateTag(id: String!, input: TagInput!): Tag
+    deleteTag(id: String!): String
 }
 
 # ===================
@@ -126,6 +135,26 @@ input LocationInput {
 
 type LocationPage {
     data: [Location!]!
+    total: Int!
+    page: Int!
+    size: Int!
+}
+
+# ===================
+# Tag Types
+# ===================
+
+type Tag {
+    tagId: String!
+    tagName: String!
+}
+
+input TagInput {
+    tagName: String!
+}
+
+type TagPage {
+    data: [Tag!]!
     total: Int!
     page: Int!
     size: Int!
