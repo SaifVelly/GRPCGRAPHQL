@@ -2,7 +2,6 @@ package com.rest.server.graphql.resolvers;
 
 import com.rest.server.graphql.inputs.LoginInput;
 import com.rest.server.graphql.responses.LoginResponse;
-import com.rest.server.models.User;
 import com.rest.server.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
