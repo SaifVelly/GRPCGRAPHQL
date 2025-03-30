@@ -1,7 +1,7 @@
 package com.rest.server.graphql.resolvers;
 
 import com.rest.server.models.Location;
-import com.rest.server.graphql.inputss.LocationInput;
+import com.rest.server.graphql.inputs.LocationInput;
 import com.rest.server.services.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;

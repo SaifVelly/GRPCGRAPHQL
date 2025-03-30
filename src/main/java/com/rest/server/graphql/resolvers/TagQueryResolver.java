@@ -1,6 +1,6 @@
 package com.rest.server.graphql.resolvers;
 
-import com.rest.server.graphql.inputss.TagPage;
+import com.rest.server.graphql.inputs.TagPage;
 import com.rest.server.models.Tag;
 import com.rest.server.services.TagService;
 import org.springframework.beans.factory.annotation.Autowired;

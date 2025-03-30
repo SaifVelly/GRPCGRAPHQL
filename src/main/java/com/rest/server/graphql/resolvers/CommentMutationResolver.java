@@ -1,7 +1,7 @@
 package com.rest.server.graphql.resolvers;
 
 import com.rest.server.models.Comment;
-import com.rest.server.graphql.inputss.CommentInput;
+import com.rest.server.graphql.inputs.CommentInput;
 import com.rest.server.services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
