@@ -72,3 +72,4 @@ type CommentPage {
     page: Int!
     size: Int!
 }
+
