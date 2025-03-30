@@ -198,6 +198,7 @@ input UserInput {
     userLastName: String!
     userGender: String
     userEmail: String!
+    userPassword: String!
     userDateOfBirth: String
     userPhone: String
     userPicture: String

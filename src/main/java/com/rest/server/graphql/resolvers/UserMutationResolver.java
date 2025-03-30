@@ -24,6 +24,7 @@ public class UserMutationResolver {
         user.setUserLastName(input.getUserLastName());
         user.setUserGender(input.getUserGender());
         user.setUserEmail(input.getUserEmail());
+        user.setUserPassword(input.getUserPassword());
         user.setUserDateOfBirth(input.getUserDateOfBirth());
         user.setUserRegisterDate(Instant.now().toString());
         user.setUserPhone(input.getUserPhone());
@@ -41,6 +42,7 @@ public class UserMutationResolver {
         user.setUserLastName(input.getUserLastName());
         user.setUserGender(input.getUserGender());
         user.setUserEmail(input.getUserEmail());
+        user.setUserPassword(input.getUserPassword());
         user.setUserDateOfBirth(input.getUserDateOfBirth());
         user.setUserPhone(input.getUserPhone());
         user.setUserPicture(input.getUserPicture());
