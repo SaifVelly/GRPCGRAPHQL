@@ -23,8 +23,14 @@ type Mutation {
     createComment(input: CommentInput!): Comment
     updateComment(id: String!, input: CommentInput!): Comment
     deleteComment(id: String!): String
+
+    # Auth Mutation
+    login(input: LoginInput!): LoginResponse
 }
 
+# ===================
+# Post Types
+# ===================
 type Post {
     postId: ID!
     postText: String!
@@ -52,6 +58,9 @@ input PostInput {
     postOwnerId: String!
 }
 
+# ===================
+# Comment Types
+# ===================
 type Comment {
     commentId: String!
     commentMessage: String!
@@ -73,3 +82,15 @@ type CommentPage {
     size: Int!
 }
 
+# ===================
+# Auth Types
+# ===================
+input LoginInput {
+    userEmail: String!
+    userPassword: String!
+}
+
+type LoginResponse {
+    userId: String!
+    message: String!
+}
