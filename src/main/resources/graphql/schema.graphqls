@@ -11,6 +11,10 @@ type Query {
     getSingleComment(id: String!): Comment
     getCommentsByPost(postId: String!, page: Int!, size: Int!): CommentPage
     getCommentsByUser(userId: String!, page: Int!, size: Int!): CommentPage
+
+    # Location Queries
+    getAllLocations(page: Int!, size: Int!): LocationPage
+    getSingleLocation(id: String!): Location
 }
 
 type Mutation {
@@ -26,6 +30,11 @@ type Mutation {
 
     # Auth Mutation
     login(input: LoginInput!): LoginResponse
+
+    # Location Mutations
+    createLocation(input: LocationInput!): Location
+    updateLocation(id: String!, input: LocationInput!): Location
+    deleteLocation(id: String!): String
 }
 
 # ===================
@@ -93,4 +102,31 @@ input LoginInput {
 type LoginResponse {
     userId: String!
     message: String!
+}
+
+# ===================
+# Location Types
+# ===================
+type Location {
+    locationId: String!
+    locationStreet: String!
+    locationCity: String!
+    locationState: String!
+    locationCountry: String!
+    locationTimezone: String!
+}
+
+input LocationInput {
+    locationStreet: String!
+    locationCity: String!
+    locationState: String!
+    locationCountry: String!
+    locationTimezone: String!
+}
+
+type LocationPage {
+    data: [Location!]!
+    total: Int!
+    page: Int!
+    size: Int!
 }
