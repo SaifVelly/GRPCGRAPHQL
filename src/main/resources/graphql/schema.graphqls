@@ -24,6 +24,11 @@ type Query {
     greeting(locale: String!): String
     currentDate(locale: String!): String
     triggerServerError: String
+
+    # User Queries
+    getAllUsers(page: Int!, size: Int!): UserPage
+    getUser(id: String!): User
+    searchUsers(query: String!, page: Int!, size: Int!): UserPage
 }
 
 type Mutation {
@@ -49,6 +54,11 @@ type Mutation {
     createTag(input: TagInput!): Tag
     updateTag(id: String!, input: TagInput!): Tag
     deleteTag(id: String!): String
+
+    # User Mutation
+    createUser(input: UserInput!): User
+    updateUser(id: String!, input: UserInput!): User
+    deleteUser(id: String!): String
 }
 
 # ===================
@@ -160,6 +170,42 @@ input TagInput {
 
 type TagPage {
     data: [Tag!]!
+    total: Int!
+    page: Int!
+    size: Int!
+}
+
+# ===================
+# User Types
+# ===================
+type User {
+    userId: String!
+    userTitle: String
+    userFirstName: String!
+    userLastName: String!
+    userGender: String
+    userEmail: String!
+    userDateOfBirth: String
+    userRegisterDate: String
+    userPhone: String
+    userPicture: String
+    userLocationId: String
+}
+
+input UserInput {
+    userTitle: String
+    userFirstName: String!
+    userLastName: String!
+    userGender: String
+    userEmail: String!
+    userDateOfBirth: String
+    userPhone: String
+    userPicture: String
+    userLocationId: String
+}
+
+type UserPage {
+    data: [User!]!
     total: Int!
     page: Int!
     size: Int!
