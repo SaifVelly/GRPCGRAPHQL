@@ -2,12 +2,12 @@
 //
 //import com.rest.server.models.Post;
 //import com.rest.server.services.PostService;
-//import com.rest.server.graphql.inputss.PostPage;
+//import com.rest.server.graphql.inputs.PostPage;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.data.domain.*;
 //import org.springframework.graphql.data.method.annotation.*;
 //import org.springframework.stereotype.Controller;
-//import com.rest.server.graphql.inputss.PostInput;
+//import com.rest.server.graphql.inputs.PostInput;
 //
 //
 //@Controller
