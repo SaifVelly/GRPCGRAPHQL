@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GraphQL Multi-Query Client</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    h2 { margin-top: 2rem; }
+    pre { background: #f0f0f0; padding: 10px; border-radius: 5px; }
+    button { margin-right: 10px; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+
+  <h1>🚀 GraphQL Multi-Query Client</h1>
+  <div>
+    <button onclick="fetchAll()">Fetch All Data</button>
+    <button onclick="fetchGreeting()">Fetch Greeting</button>
+  </div>
+
+  <h2>📰 Posts</h2>
+  <div id="posts"><em>No posts yet.</em></div>
+
+  <h2>👥 Users</h2>
+  <div id="users"><em>No users yet.</em></div>
+
+  <h2>🏷️ Tags</h2>
+  <div id="tags"><em>No tags yet.</em></div>
+
+  <h2>📍 Locations</h2>
+  <div id="locations"><em>No locations yet.</em></div>
+
+  <h2>💬 Greeting</h2>
+  <div id="greeting"><em>Click button above to fetch greeting.</em></div>
+
+  <script>
+    const GRAPHQL_ENDPOINT = "http://localhost:8080/graphql";
+
+    async function runQuery(query) {
+      const res = await fetch(GRAPHQL_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ query })
+      });
+      const data = await res.json();
+      return data.data;
+    }
+
+    async function fetchAll() {
+      const queries = {
+        posts: `
+          query {
+            allPosts(page: 1, size: 5) {
+              data {
+                postId
+                postText
+                postPublishDate
+              }
+              total
+            }
+          }
+        `,
+        users: `
+          query {
+            getAllUsers(page: 1, size: 5) {
+              data {
+                userId
+                userFirstName
+                userLastName
+                userEmail
+              }
+              total
+            }
+          }
+        `,
+        tags: `
+          query {
+            getAllTags(page: 1, size: 5) {
+              data {
+                tagId
+                tagName
+              }
+              total
+            }
+          }
+        `,
+        locations: `
+          query {
+            getAllLocations(page: 1, size: 5) {
+              data {
+                locationId
+                locationCity
+                locationCountry
+              }
+              total
+            }
+          }
+        `
+      };
+
+      // Run all queries in parallel
+      const [postData, userData, tagData, locationData] = await Promise.all([
+        runQuery(queries.posts),
+        runQuery(queries.users),
+        runQuery(queries.tags),
+        runQuery(queries.locations)
+      ]);
+
+      document.getElementById("posts").innerHTML = formatJSON(postData.allPosts);
+      document.getElementById("users").innerHTML = formatJSON(userData.getAllUsers);
+      document.getElementById("tags").innerHTML = formatJSON(tagData.getAllTags);
+      document.getElementById("locations").innerHTML = formatJSON(locationData.getAllLocations);
+    }
+
+    async function fetchGreeting() {
+      const query = `
+        query {
+          greeting(locale: "en")
+        }
+      `;
+      const data = await runQuery(query);
+      document.getElementById("greeting").innerText = data.greeting;
+    }
+
+    function formatJSON(obj) {
+      return `<pre>${JSON.stringify(obj, null, 2)}</pre>`;
+    }
+  </script>
+
+</body>
+</html>
