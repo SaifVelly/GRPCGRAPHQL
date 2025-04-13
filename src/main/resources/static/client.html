@@ -1,56 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>GraphQL Multi-Query Client</title>
+  <meta charset="UTF-8" />
+  <title>GraphQL Full Client</title>
   <style>
     body { font-family: sans-serif; padding: 20px; }
     h2 { margin-top: 2rem; }
     pre { background: #f0f0f0; padding: 10px; border-radius: 5px; }
-    button { margin-right: 10px; margin-bottom: 10px; }
+    button { margin-top: 5px; margin-bottom: 10px; }
+    input { margin: 5px; padding: 4px; }
+    .section { margin-bottom: 40px; }
   </style>
 </head>
 <body>
 
-  <h1>🚀 GraphQL Multi-Query Client</h1>
-  <div>
-    <button onclick="fetchAll()">Fetch All Data</button>
-    <button onclick="fetchGreeting()">Fetch Greeting</button>
-  </div>
+<h1>🚀 GraphQL Full Client</h1>
 
-  <h2>📰 Posts</h2>
-  <div id="posts"><em>No posts yet.</em></div>
+<div class="section">
+  <button onclick="fetchAll()">🔄 Fetch All Data</button>
+  <button onclick="fetchGreeting()">👋 Fetch Greeting</button>
+  <div id="greeting"><em>Click to load greeting...</em></div>
+</div>
 
+<div class="section">
   <h2>👥 Users</h2>
-  <div id="users"><em>No users yet.</em></div>
+  <div id="users"><em>No users loaded.</em></div>
 
+  <h3>➕ Add New User</h3>
+  <input id="newFirstName" placeholder="First Name" />
+  <input id="newLastName" placeholder="Last Name" />
+  <input id="newEmail" placeholder="Email" />
+  <input id="newPassword" type="password" placeholder="Password" />
+  <button onclick="addUser()">Add User</button>
+  <div id="addUserResult"></div>
+
+  <h3>✏️ Update User</h3>
+  <input id="updateId" placeholder="User ID" />
+  <input id="updateFirstName" placeholder="New First Name" />
+  <input id="updateLastName" placeholder="New Last Name" />
+  <input id="updateEmail" placeholder="New Email" />
+  <button onclick="updateUser()">Update User</button>
+  <div id="updateUserResult"></div>
+
+  <h3>❌ Delete User</h3>
+  <input id="deleteId" placeholder="User ID to Delete" />
+  <button onclick="deleteUser()">Delete</button>
+  <div id="deleteUserResult"></div>
+</div>
+
+<div class="section">
+  <h2>📰 Posts</h2>
+  <div id="posts"><em>No posts loaded.</em></div>
+</div>
+
+<div class="section">
   <h2>🏷️ Tags</h2>
-  <div id="tags"><em>No tags yet.</em></div>
+  <div id="tags"><em>No tags loaded.</em></div>
+</div>
 
+<div class="section">
   <h2>📍 Locations</h2>
-  <div id="locations"><em>No locations yet.</em></div>
+  <div id="locations"><em>No locations loaded.</em></div>
+</div>
 
-  <h2>💬 Greeting</h2>
-  <div id="greeting"><em>Click button above to fetch greeting.</em></div>
+<script>
+  const GRAPHQL_ENDPOINT = "http://localhost:8080/graphql";
 
-  <script>
-    const GRAPHQL_ENDPOINT = "http://localhost:8080/graphql";
+  async function runQuery(query) {
+    const res = await fetch(GRAPHQL_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query }),
+    });
+    const json = await res.json();
+    if (json.errors) console.error(json.errors);
+    return json.data;
+  }
 
-    async function runQuery(query) {
-      const res = await fetch(GRAPHQL_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ query })
-      });
-      const data = await res.json();
-      return data.data;
-    }
+  function formatJSON(obj) {
+    return `<pre>${JSON.stringify(obj, null, 2)}</pre>`;
+  }
 
-    async function fetchAll() {
-      const queries = {
-        posts: `
+  async function fetchAll() {
+    const queries = {
+      posts: `
           query {
             allPosts(page: 1, size: 5) {
               data {
@@ -62,7 +95,7 @@
             }
           }
         `,
-        users: `
+      users: `
           query {
             getAllUsers(page: 1, size: 5) {
               data {
@@ -75,7 +108,7 @@
             }
           }
         `,
-        tags: `
+      tags: `
           query {
             getAllTags(page: 1, size: 5) {
               data {
@@ -86,7 +119,7 @@
             }
           }
         `,
-        locations: `
+      locations: `
           query {
             getAllLocations(page: 1, size: 5) {
               data {
@@ -97,37 +130,94 @@
               total
             }
           }
-        `
-      };
+        `,
+    };
 
-      // Run all queries in parallel
-      const [postData, userData, tagData, locationData] = await Promise.all([
-        runQuery(queries.posts),
-        runQuery(queries.users),
-        runQuery(queries.tags),
-        runQuery(queries.locations)
-      ]);
+    const [postData, userData, tagData, locationData] = await Promise.all([
+      runQuery(queries.posts),
+      runQuery(queries.users),
+      runQuery(queries.tags),
+      runQuery(queries.locations),
+    ]);
 
-      document.getElementById("posts").innerHTML = formatJSON(postData.allPosts);
-      document.getElementById("users").innerHTML = formatJSON(userData.getAllUsers);
-      document.getElementById("tags").innerHTML = formatJSON(tagData.getAllTags);
-      document.getElementById("locations").innerHTML = formatJSON(locationData.getAllLocations);
-    }
+    document.getElementById("posts").innerHTML = formatJSON(postData.allPosts);
+    document.getElementById("users").innerHTML = formatJSON(userData.getAllUsers);
+    document.getElementById("tags").innerHTML = formatJSON(tagData.getAllTags);
+    document.getElementById("locations").innerHTML = formatJSON(locationData.getAllLocations);
+  }
 
-    async function fetchGreeting() {
-      const query = `
+  async function fetchGreeting() {
+    const data = await runQuery(`
         query {
           greeting(locale: "en")
         }
-      `;
-      const data = await runQuery(query);
-      document.getElementById("greeting").innerText = data.greeting;
-    }
+      `);
+    document.getElementById("greeting").innerText = data.greeting;
+  }
 
-    function formatJSON(obj) {
-      return `<pre>${JSON.stringify(obj, null, 2)}</pre>`;
-    }
-  </script>
+  async function addUser() {
+    const fn = document.getElementById("newFirstName").value;
+    const ln = document.getElementById("newLastName").value;
+    const email = document.getElementById("newEmail").value;
+    const pass = document.getElementById("newPassword").value;
+
+    const query = `
+        mutation {
+          createUser(input: {
+            userFirstName: "${fn}",
+            userLastName: "${ln}",
+            userEmail: "${email}",
+            userPassword: "${pass}"
+          }) {
+            userId
+            userFirstName
+            userLastName
+          }
+        }
+      `;
+    const data = await runQuery(query);
+    document.getElementById("addUserResult").innerHTML = formatJSON(data.createUser);
+    fetchAll();
+  }
+
+  async function updateUser() {
+    const id = document.getElementById("updateId").value;
+    const fn = document.getElementById("updateFirstName").value;
+    const ln = document.getElementById("updateLastName").value;
+    const email = document.getElementById("updateEmail").value;
+
+    const query = `
+        mutation {
+          updateUser(id: "${id}", input: {
+            userFirstName: "${fn}",
+            userLastName: "${ln}",
+            userEmail: "${email}",
+            userPassword: "dummyPass"  # required by schema
+          }) {
+            userId
+            userFirstName
+            userLastName
+            userEmail
+          }
+        }
+      `;
+    const data = await runQuery(query);
+    document.getElementById("updateUserResult").innerHTML = formatJSON(data.updateUser);
+    fetchAll();
+  }
+
+  async function deleteUser() {
+    const id = document.getElementById("deleteId").value;
+    const query = `
+        mutation {
+          deleteUser(id: "${id}")
+        }
+      `;
+    const data = await runQuery(query);
+    document.getElementById("deleteUserResult").innerText = data.deleteUser;
+    fetchAll();
+  }
+</script>
 
 </body>
 </html>
